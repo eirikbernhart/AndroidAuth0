@@ -17,23 +17,29 @@ public class LoginActivity extends Activity {
 
     private Lock mLock;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Auth0 auth0 = new Auth0(this);
+
+        auth0.setLoggingEnabled(true);
+
         auth0.setOIDCConformant(true);
         mLock = Lock.newBuilder(auth0, mCallback)
                 .withScheme("demo")
                 .withAudience(String.format("https://%s/userinfo", getString(R.string.com_auth0_domain)))
-                //Add parameters to the builder
                 .build(this);
         startActivity(mLock.newIntent(this));
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        // Your own Activity code
+
+
+
         mLock.onDestroy(this);
         mLock = null;
     }
@@ -53,7 +59,7 @@ public class LoginActivity extends Activity {
 
         @Override
         public void onError(LockException error) {
-            Toast.makeText(getApplicationContext(), "Log In - Error Occurred", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Log In - Error Occurred: ", Toast.LENGTH_SHORT).show();
         }
     };
 
